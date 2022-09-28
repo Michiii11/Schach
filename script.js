@@ -1,18 +1,14 @@
-//----------- Basic  -----------//
+//----------- Game Matrix  -----------//
 let gameMatrix = [
-    ["towerW", "horseW", "runnerW", "queenW", "kingW", "runnerW", "horseW", "towerW"],
-    ["farmerW", "farmerW", "farmerW", "farmerW", "farmerW", "farmerW", "farmerW", "farmerW"],
+    ["rookW", "knightW", "bishopW", "queenW", "kingW", "bishopW", "knightW", "rookW"],
+    ["pawnW", "pawnW", "pawnW", "pawnW", "pawnW", "pawnW", "pawnW", "pawnW"],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    ["farmerB", "farmerB", "farmerB", "farmerB", "farmerB", "farmerB", "farmerB", "farmerB"],
-    ["towerB", "horseB", "runnerB", "queenB", "kingB", "runnerB", "horseB", "towerB"],
+    ["pawnB", "pawnB", "pawnB", "pawnB", "pawnB", "pawnB", "pawnB", "pawnB"],
+    ["rookB", "knightB", "bishopB", "queenB", "kingB", "bishopB", "knightB", "rookB"],
 ]
-let auswahl = false;
-let position1;
-let figure;
-let white = true;
 
 
 //----------- Build Chess Board -----------//
@@ -28,7 +24,7 @@ function buildChessboard(){ // true == white , false == black
         for(let x = startL.charCodeAt(0); x < startL.charCodeAt(0)+8; x++){
             content += `<div class="rows">`
             for(let y = startN; y <= 8; y++){
-                content += `<div class="box" onclick="moveFigure('${String.fromCharCode(x)}${y}')" id="${String.fromCharCode(x)}${y}">${String.fromCharCode(x)}${y}</div>`;
+                content += `<div class="box" onclick="moveFigure('${String.fromCharCode(x)}${y}', elem)" id="${String.fromCharCode(x)}${y}">${String.fromCharCode(x)}${y}</div>`;
             }
             content += `</div>`
         }

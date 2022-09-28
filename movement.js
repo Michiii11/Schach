@@ -1,7 +1,25 @@
-
 //----------- Movement -----------//
-function moveFigure(){
+let position1; // Start Position
+let figure; // Current Figure
+let picked = false; // Status if figure is picked
+let white = true; 
 
+function moveFigure(position, elem){
+    let x = ah(position.substr(0,1));
+    console.log(x)
+    if(picked == false){
+        if(document.querySelector('.active')){
+            document.querySelector('.active').classList.remove("active");
+        }
+        elem.classList.add("active")
+        picked = true;
+        position1 = position
+        document.getElementById(position1).style.border = "solid 1px orange";
+    } else {
+        document.querySelector('.active').classList.remove("active");
+        picked = false;
+        document.getElementById(position1).style.border = "solid 1px black";
+    }
 }
 
 function checkMove(figure, x1, y1, x2, y2){ // Figur, Position before, Position after
