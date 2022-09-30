@@ -12,35 +12,32 @@ let gameMatrix = [
 
 
 //----------- Build Chess Board -----------//
-let side = true;
+let side = false;
 buildChessboard();
-function buildChessboard(){ // true == white , false == black
+function buildChessboard() { // true == white , false == black
     let content = ""
 
-    if(!side){ // Schwarz unten    
-        for(let x = 0; x < 8; x++){
+    if (!side) { // Schwarz unten   
+        for (let x = 0; x < 8; x++) { 
             content += `<div class="rows">`
-            for(let y = 0; y < 8; y++){
-                content += `<div class="box ${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
+            for (let y = 7; y >= 0; y--) {
+                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
             }
             content += `</div>`
         }
-    } else{ // Weiß unten
-        let startN = 7;
-        let startL = 0;
-    
-        for(let x = 0; x < 8; x++){
+    } else { // Weiß unten
+        for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
-            for(let y = 7; y >= 0; y--){
-                content += `<div class="box ${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
+            for (let y = 0; y < 8; y++) {
+                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
             }
             content += `</div>`
         }
     }
 
-    if(side){
+    if (side) {
         side = false;
-    } else{
+    } else {
         side = true;
     }
     document.getElementById("chessboard").innerHTML = content;
@@ -49,65 +46,89 @@ function buildChessboard(){ // true == white , false == black
 }
 
 //----------- Tools -----------//
-function getPos(x, y){
+function getPos(x, y) {
     let basepos = 0
-    if(y>0)
-    basepos = y*8
-    return document.querySelectorAll('.box')[basepos+x]
+    if (y > 0)
+        basepos = y * 8
+    return document.querySelectorAll('.box')[basepos + x]
 }
 
-function pickFigure(position){
-    let x = ah(position.substr(0,1));
-    let y = parseInt(position.substr(1,1)-1)
+let prevPos = null;
+function pickFigure(position) {
+    let x = position[0]
+    let y = position[1]
 
-    if(picked == false){
-        if(white == true){
-            if(gameMatrix[y][x].substr(gameMatrix[y][x].length-1, 1) == "W"){
-                if(document.querySelector('.active')){
-                    document.querySelector('.active').classList.remove("active");
+    if (picked == false || prevPos != position) {
+        if (!prevPos && gameMatrix[y][x] != "") {
+            if(white == true && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "W" || white == false && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "B"){
+                if (document.querySelector('.active')) {
+                    removeMark();
                 }
-                let elem = document.querySelector(`.${position}`)
-                elem.classList.add("active")
-
+                addMark(position)
                 picked = true;
-                position1 = position
+                prevPos = position
             }
-        } else{
-            if(gameMatrix[y][x].substr(gameMatrix[y][x].length-1, 1) == "B"){
-                if(document.querySelector('.active')){
-                    document.querySelector('.active').classList.remove("active");
-                }
-                let elem = document.querySelector(`.${position}`)
-                elem.classList.add("active")
 
-                picked = true;
-                position1 = position
+        } else{
+            if(prevPos){
+                x1 = parseInt(prevPos.substr(0,1))
+                y1 = parseInt(prevPos.substr(1,1))
+                let check = checkMove(gameMatrix[y1][x1], x1, y1, parseInt(x), parseInt(y))
+                if(check){
+                    let pos = [x, y]
+                    moveFigure(pos, gameMatrix[y1][x1])
+                    gameMatrix[y1][x1] = 0;
+                    setFigures();
+    
+                    swapMove();
+                    picked = false;
+                    prevPos = null;
+                    removeMark();
+                }
             }
         }
-        console.log(document.querySelector('.active').classList)
-
     } else {
         picked = false;
-    }}
+        prevPos = null;
+        removeMark(position)
+    }
+}
 
-function setFigures(){
+function setFigures() {
     let startN = 1;
     let startL = 'a';
 
-    for(let x = startL.charCodeAt(0); x < startL.charCodeAt(0)+8; x++){
-        for(let y = startN; y <= 8; y++){
-            if(gameMatrix[y-1][x-97]){
-                document.querySelector(`.${String.fromCharCode(x)}${y}`).style.backgroundImage = `url(./Figures/${gameMatrix[y-1][x-97]}.png)`;
-            }
-        }
-}}
-
-function setMuster(){
-    for(let i = 0; i < 8; i++){
-        for(let j = 0; j < 8; j++){
-            if((i+j)%2 == 0){
-                getPos(i,j).style.backgroundColor = "grey";
+    for (let x = 0; x < 8; x++) {
+        for (let y = 7; y >= 0; y--) {
+            document.querySelector(`.F${x}${y}`).style.backgroundImage = "none";
+            if (gameMatrix[y][x]) {
+                document.querySelector(`.F${x}${y}`).style.backgroundImage = `url(./Figures/${gameMatrix[y][x]}.png)`;
             }
         }
     }
+}
+
+function setMuster() {
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if ((i + j) % 2 == 0) {
+                getPos(i, j).style.backgroundColor = "grey";
+            }
+        }
+    }
+}
+
+function swapMove(){
+    if(white == false){
+        white = true;
+    } else{
+        white = false;
+    }
+}
+function addMark(position){
+    let elem = document.querySelector(`.F${position}`)
+    elem.classList.add("active")
+}
+function removeMark(){
+    document.querySelector('.active').classList.remove("active");
 }
