@@ -17,25 +17,22 @@ buildChessboard();
 function buildChessboard(){ // true == white , false == black
     let content = ""
 
-    if(!side){ // Schwarz unten
-        let startN = 1;
-        let startL = 'a';
-    
-        for(let x = startL.charCodeAt(0); x < startL.charCodeAt(0)+8; x++){
+    if(!side){ // Schwarz unten    
+        for(let x = 0; x < 8; x++){
             content += `<div class="rows">`
-            for(let y = startN; y <= 8; y++){
-                content += `<div class="box" onclick="moveFigure('${String.fromCharCode(x)}${y}', elem)" id="${String.fromCharCode(x)}${y}">${String.fromCharCode(x)}${y}</div>`;
+            for(let y = 0; y < 8; y++){
+                content += `<div class="box ${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
             }
             content += `</div>`
         }
     } else{ // Weiß unten
-        let startN = 8;
-        let startL = 'a';
+        let startN = 7;
+        let startL = 0;
     
-        for(let x = startL.charCodeAt(0); x < startL.charCodeAt(0)+8; x++){
+        for(let x = 0; x < 8; x++){
             content += `<div class="rows">`
-            for(let y = startN; y > 0; y--){
-                content += `<div class="box" onclick="moveFigure('${String.fromCharCode(x)}${y}')" id="${String.fromCharCode(x)}${y}">${String.fromCharCode(x)}${y}</div>`;
+            for(let y = 7; y >= 0; y--){
+                content += `<div class="box ${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
             }
             content += `</div>`
         }
@@ -52,6 +49,47 @@ function buildChessboard(){ // true == white , false == black
 }
 
 //----------- Tools -----------//
+function getPos(x, y){
+    let basepos = 0
+    if(y>0)
+    basepos = y*8
+    return document.querySelectorAll('.box')[basepos+x]
+}
+
+function pickFigure(position){
+    let x = ah(position.substr(0,1));
+    let y = parseInt(position.substr(1,1)-1)
+
+    if(picked == false){
+        if(white == true){
+            if(gameMatrix[y][x].substr(gameMatrix[y][x].length-1, 1) == "W"){
+                if(document.querySelector('.active')){
+                    document.querySelector('.active').classList.remove("active");
+                }
+                let elem = document.querySelector(`.${position}`)
+                elem.classList.add("active")
+
+                picked = true;
+                position1 = position
+            }
+        } else{
+            if(gameMatrix[y][x].substr(gameMatrix[y][x].length-1, 1) == "B"){
+                if(document.querySelector('.active')){
+                    document.querySelector('.active').classList.remove("active");
+                }
+                let elem = document.querySelector(`.${position}`)
+                elem.classList.add("active")
+
+                picked = true;
+                position1 = position
+            }
+        }
+        console.log(document.querySelector('.active').classList)
+
+    } else {
+        picked = false;
+    }}
+
 function setFigures(){
     let startN = 1;
     let startL = 'a';
@@ -59,39 +97,17 @@ function setFigures(){
     for(let x = startL.charCodeAt(0); x < startL.charCodeAt(0)+8; x++){
         for(let y = startN; y <= 8; y++){
             if(gameMatrix[y-1][x-97]){
-                document.getElementById(`${String.fromCharCode(x)}${y}`).style.backgroundImage = `url(./Figures/${gameMatrix[y-1][x-97]}.png)`;
+                document.querySelector(`.${String.fromCharCode(x)}${y}`).style.backgroundImage = `url(./Figures/${gameMatrix[y-1][x-97]}.png)`;
             }
         }
 }}
 
 function setMuster(){
-    for (let i = 1; i <= 8; i++){
-        for(let j = 1; j <= 8; j+=2){
-            switch(i)
-            {
-                case(1) : document.getElementById(`a${j}`).style.backgroundColor = "grey";   break;
-                case(2) : document.getElementById(`b${j+1}`).style.backgroundColor = "grey"; break;
-                case(3) : document.getElementById(`c${j}`).style.backgroundColor = "grey";   break;
-                case(4) : document.getElementById(`d${j+1}`).style.backgroundColor = "grey"; break;
-                case(5) : document.getElementById(`e${j}`).style.backgroundColor = "grey";   break;
-                case(6) : document.getElementById(`f${j+1}`).style.backgroundColor = "grey"; break;
-                case(7) : document.getElementById(`g${j}`).style.backgroundColor = "grey";   break;
-                case(8) : document.getElementById(`h${j+1}`).style.backgroundColor = "grey"; break;
+    for(let i = 0; i < 8; i++){
+        for(let j = 0; j < 8; j++){
+            if((i+j)%2 == 0){
+                getPos(i,j).style.backgroundColor = "grey";
             }
         }
     }
-}
-
-function ah(position){ // Converts letter into number
-    switch(position){
-        case("a"): x = 0; break;
-        case("b"): x = 1; break;
-        case("c"): x = 2; break;
-        case("d"): x = 3; break;
-        case("e"): x = 4; break;
-        case("f"): x = 5; break;  
-        case("g"): x = 6; break;
-        case("h"): x = 7; break;  
-    }
-    return x;
 }
