@@ -37,7 +37,8 @@ function moveFigure(position){
                             auswahl = false;
                             white = false;
                             document.getElementById(position1).style.border = "solid 1px black";
-                            document.getElementById("who").innerHTML = "Schwarz ist am Zug!";
+                            document.getElementById("p1").style.color = "black";
+                            document.getElementById("p2").style.color = "orange";
                         }
                         //Schwarze Figuren können sich nicht selbst schlagen
                         else if(white == false && gameMatrix[position.substr(1,2)-1][x] != "turmS" && gameMatrix[position.substr(1,2)-1][x] != "springerS" && gameMatrix[position.substr(1,2)-1][x] != "springerS2" && gameMatrix[position.substr(1,2)-1][x] != "läuferS" && gameMatrix[position.substr(1,2)-1][x] != "königS" && gameMatrix[position.substr(1,2)-1][x] != "dameS" && gameMatrix[position.substr(1,2)-1][x] != "bauerS"){
@@ -48,7 +49,8 @@ function moveFigure(position){
                             auswahl = false;
                             white = true;
                             document.getElementById(position1).style.border = "solid 1px black";
-                            document.getElementById("who").innerHTML = "Weiß ist am Zug!";
+                            document.getElementById("p1").style.color = "orange";
+                            document.getElementById("p2").style.color = "black";
                         }       
                     }
                 }

@@ -9,8 +9,6 @@ function moveFigure(position, figure) {
 }
 
 function checkMove(figure, x1, y1, x2, y2) { // Figur, Position before, Position after
-    console.log(figure, x1, y1, x2, y2)
-
     if(gameMatrix[y2][x2] != 0){
         if(gameMatrix[y2][x2].substr(gameMatrix[y2][x2].length-1, 1) == figure.substr(figure.length-1, 1)){
             return false
@@ -150,10 +148,27 @@ function checkMove(figure, x1, y1, x2, y2) { // Figur, Position before, Position
         }
         return false;
     } else if (tfigure == "king") {
-        if(x1-x2 == 1 || x1-x2 == -1) {
-            return true
+        // King not next to King
+        let king = [
+            {"x": -1, "y": -1}, {"x": -1, "y": 0}, {"x": -1, "y": 1},
+            {"x": 0, "y": -1}, {"x": 0, "y": 0}, {"x": 0, "y": 1},
+            {"x": 1, "y": -1}, {"x": 1, "y": 0}, {"x": 1, "y": 1},
+        ]
+        for (let i = 0; i < king.length; i++) {
+            if(figure == tfigure + "W") {
+                if(gameMatrix[y2+king[i].y][x2+king[i].x] == tfigure+"B") {
+                    return false;
+                }
+            }
+            if(figure == tfigure + "B") {
+                if(gameMatrix[y2+king[i].y][x2+king[i].x] == tfigure+"W") {
+                    return false;
+                }
+            }
         }
-        if(y1-y2 == 1 || y1-y2 == -1) {
+
+        // Standard Movement
+        if(Math.abs(x1-x2) == 1 || Math.abs(y1-y2) == 1) {
             return true
         }
         return false

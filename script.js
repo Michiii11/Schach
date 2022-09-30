@@ -21,7 +21,7 @@ function buildChessboard() { // true == white , false == black
         for (let x = 0; x < 8; x++) { 
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
-                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
+                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -29,7 +29,7 @@ function buildChessboard() { // true == white , false == black
         for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
-                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')">${x}${y}</div>`;
+                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -58,6 +58,16 @@ function pickFigure(position) {
     let x = position[0]
     let y = position[1]
 
+    if(prevPos && gameMatrix[y][x] != 0){
+        if(prevPos != position){
+            if(white == true && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "W" || white == false && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "B"){
+                picked = false;
+                prevPos = null;
+                removeMark(position)
+            }
+        }
+    }
+
     if (picked == false || prevPos != position) {
         if (!prevPos && gameMatrix[y][x] != "") {
             if(white == true && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "W" || white == false && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "B"){
@@ -68,7 +78,6 @@ function pickFigure(position) {
                 picked = true;
                 prevPos = position
             }
-
         } else{
             if(prevPos){
                 x1 = parseInt(prevPos.substr(0,1))
@@ -121,8 +130,10 @@ function setMuster() {
 function swapMove(){
     if(white == false){
         white = true;
+        document.querySelector('#who').innerHTML = "Weiß ist am Zug!"
     } else{
         white = false;
+        document.querySelector('#who').innerHTML = "Schwarz ist am Zug!"
     }
 }
 function addMark(position){

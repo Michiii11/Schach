@@ -5,22 +5,33 @@ body{
     color: white;
 }
 
-h3{
-    text-align: center;
-    font-size: 1.5rem;
-}
-
 *{
     user-select: none;
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+}
+h3{
+    font-size: 1.5rem;
+}
+.fa-rotate{
+    position: absolute;
+    left: 71%;
+    top: 48.5%;
+    font-size: 2rem;
+}
+.fa-rotate:hover{
+    cursor: pointer;
 }
 
 /*---------- Chessboard ----------*/
 #chessboard {
-    margin-top: 2%;
+    margin-inline: 30vw;
+    width: 40vw;
+    height: 80vh;
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
-    margin-inline: 30%;
     border-radius: 1rem;
 }
 .rows1 {
