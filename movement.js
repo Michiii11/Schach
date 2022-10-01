@@ -173,31 +173,34 @@ function checkMove(figure, x1, y1, x2, y2) { // Figur, Position before, Position
         }
         return false
     } else if (tfigure == "rook") {
-        let diff;
-        if(x2 != x1){
-            diff = Math.abs(x2-x1)
-        } else{
-            diff = Math.abs(y2-y1)
-        }
-
-        let xD;
-        let yD;
-        if(x1 > x2){xD = -1;} 
-        else{xD = 1;}
-        if(y1 > y2){yD = -1;} 
-        else{yD = 1;}
-
-        for (let i = 0; i < diff-1; i++) {
-            if(y1 != y2){
-                if(gameMatrix[y1+1*yD+i*yD][x2] != 0) {
-                    return false
-                }
+        if(x2-x1 == 0 || y2-y1 == 0){
+            let diff;
+            if(x2 != x1){
+                diff = Math.abs(x2-x1)
             } else{
-                if(gameMatrix[y2][x1+1*xD+i*xD] != 0) {
-                    return false
+                diff = Math.abs(y2-y1)
+            }
+    
+            let xD;
+            let yD;
+            if(x1 > x2){xD = -1;} 
+            else{xD = 1;}
+            if(y1 > y2){yD = -1;} 
+            else{yD = 1;}
+    
+            for (let i = 0; i < diff-1; i++) {
+                if(y1 != y2){
+                    if(gameMatrix[y1+1*yD+i*yD][x2] != 0) {
+                        return false
+                    }
+                } else{
+                    if(gameMatrix[y2][x1+1*xD+i*xD] != 0) {
+                        return false
+                    }
                 }
             }
+            return true
         }
-        return true
+        return false    
     }
 }
