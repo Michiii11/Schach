@@ -171,6 +171,12 @@ function checkMove(figure, x1, y1, x2, y2) { // Figur, Position before, Position
         if(Math.abs(x1-x2) == 1 || Math.abs(y1-y2) == 1) {
             return true
         }
+
+        // Rochade
+        console.log(document.querySelector(`.F${x1}${y1}`).classList)
+        if(document.querySelector(`.F${x1}${y1}`).classList)
+
+
         return false
     } else if (tfigure == "rook") {
         if(x2-x1 == 0 || y2-y1 == 0){

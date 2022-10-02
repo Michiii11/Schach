@@ -21,7 +21,11 @@ function buildChessboard() { // true == white , false == black
         for (let x = 0; x < 8; x++) { 
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
-                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                if(x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0){
+                    content += `<div class="box F${x}${y} notUsed" onclick="pickFigure('${x}${y}')"></div>`;
+                } else{
+                    content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                }
             }
             content += `</div>`
         }
@@ -29,7 +33,11 @@ function buildChessboard() { // true == white , false == black
         for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
-                content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                if(x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0){
+                    content += `<div class="box F${x}${y} notUsed" onclick="pickFigure('${x}${y}')"></div>`;
+                } else{
+                    content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                }
             }
             content += `</div>`
         }
@@ -46,13 +54,6 @@ function buildChessboard() { // true == white , false == black
 }
 
 //----------- Tools -----------//
-function getPos(x, y) {
-    let basepos = 0
-    if (y > 0)
-        basepos = y * 8
-    return document.querySelectorAll('.box')[basepos + x]
-}
-
 let prevPos = null;
 function pickFigure(position) {
     let x = position[0]
@@ -84,6 +85,8 @@ function pickFigure(position) {
                 y1 = parseInt(prevPos.substr(1,1))
                 let check = checkMove(gameMatrix[y1][x1], x1, y1, parseInt(x), parseInt(y))
                 if(check){
+                    document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).classList.remove("notUsed")
+
                     let pos = [x, y]
                     moveFigure(pos, gameMatrix[y1][x1])
                     gameMatrix[y1][x1] = 0;
@@ -125,6 +128,12 @@ function setMuster() {
             }
         }
     }
+}
+function getPos(x, y) {
+    let basepos = 0
+    if (y > 0)
+        basepos = y * 8
+    return document.querySelectorAll('.box')[basepos + x]
 }
 
 function swapMove(){
