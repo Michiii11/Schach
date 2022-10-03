@@ -52,6 +52,9 @@ h3{
     
     cursor: pointer;
 }
+.box img{
+    width: 100%;
+}
 .active{
     border: orange 1px solid;
 }
