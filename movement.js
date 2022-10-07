@@ -1,6 +1,5 @@
 //----------- Movement -----------//
 let position1; // Start Position
-let figure; // Current Figure
 let picked = false; // Status if figure is picked
 let white = true; // Current Player
 
@@ -235,4 +234,44 @@ function checkMove(figure, x1, y1, x2, y2) {
         }
         return false    
     }
+}
+
+/**
+ * Check if the move is possible
+ * when the king is checked the move isn't possible
+ * @param {*} figure
+ * @param {*} pos 
+ * @returns true if move is possible - false if move isn't possible
+ */
+function checkMoveCheck(figure, pos){
+    let retur = true;
+
+    let tempMatrix = new Array(8);
+    for (let i = 0; i < 8; i++) {
+        tempMatrix[i] = new Array(8)
+    }
+
+    // Copy Game Matrix
+    for (let y = 0; y < gameMatrix.length; y++) {
+        for(let x = 0; x < gameMatrix[0].length; x++) {
+            tempMatrix[y][x] = gameMatrix[y][x]
+        }
+    }
+
+    gameMatrix[pos[1]][pos[0]] = figure;
+    gameMatrix[y1][x1] = 0;
+
+    // If check color is the figure color return false
+    if(checkCheck() == figure.substr(figure.length-1, 1)){
+        retur = false;
+    }
+
+    // Reset Game Matrix
+    for (let y = 0; y < gameMatrix.length; y++) {
+        for(let x = 0; x < gameMatrix[0].length; x++) {
+            gameMatrix[y][x] = tempMatrix[y][x]
+        }
+    }
+
+    return retur;
 }
