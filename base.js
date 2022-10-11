@@ -26,9 +26,9 @@ function buildChessboard() { // true == white , false == black
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
                 if (x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0) {
-                    content += `<div class="box F${x}${y} notUsed" onclick="pickFigure('${x}${y}')"></div>`;
+                    content += `<div class="box F${x}${y}" data-move="false" onclick="pickFigure('${x}${y}')"></div>`;
                 } else {
-                    content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                    content += `<div class="box F${x}${y}" data-move="true" onclick="pickFigure('${x}${y}')"></div>`;
                 }
             }
             content += `</div>`
@@ -38,9 +38,9 @@ function buildChessboard() { // true == white , false == black
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
                 if (x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0) {
-                    content += `<div class="box F${x}${y} notUsed" onclick="pickFigure('${x}${y}')"></div>`;
+                    content += `<div class="box F${x}${y}" data-move="false" onclick="pickFigure('${x}${y}')"></div>`;
                 } else {
-                    content += `<div class="box F${x}${y}" onclick="pickFigure('${x}${y}')"></div>`;
+                    content += `<div class="box F${x}${y}" data-move="true" onclick="pickFigure('${x}${y}')"></div>`;
                 }
             }
             content += `</div>`
@@ -138,13 +138,20 @@ function pickFigure(position) {
                     check = checkMoveCheck(gameMatrix[y1][x1], [x, y], prevPos)
 
                     if (check) { // Is the move no valid
+                        if(gameMatrix[y1][x1].substr(gameMatrix[y1][x1].length-1, 1) == "pawn") {
+                            gameMatrix[y1][x1] = convertPawn(gameMatrix[y1][x1], x1, y1, parseInt(y));
+                        }
+
+                        if(gameMatrix[y1][x1].substr(gameMatrix[y1][x1].length-1, 1) == "king"){
+                            rochade(x1, y1, type)
+                        }
+
                         document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).classList.remove("notUsed")
 
                         let pos = [x, y]
                         moveFigure(pos, gameMatrix[y1][x1])
     
                         check = checkCheck();
-                        let checkmate;
                         if(check == "W"){
                             if(checkCheckmate("W")){
                                 endMatch();

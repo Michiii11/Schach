@@ -2,6 +2,7 @@
 let position1; // Start Position
 let picked = false; // Status if figure is picked
 let white = true; // Current Player
+let rochType = true; // True small | False big
 
 /**
  * Moves the figure in the gameMatrix
@@ -97,7 +98,7 @@ function checkMove(figure, x1, y1, x2, y2) {
         // Possible moves
         let knight = [
             {"x": -2, "y": 1}, {"x": -1, "y": 2}, {"x": 1, "y": 2}, {"x": 2, "y": 1}, 
-            {"x": 2, "y": -1}, {"x": 1, "y": -2}, {"x": -1, "y": -2}, {"x": 2, "y": -1}
+            {"x": -2, "y": -1}, {"x": 1, "y": -2}, {"x": -1, "y": -2}, {"x": 2, "y": -1}
         ]
 
         // Checks if the move is one of the possible moves
@@ -199,9 +200,27 @@ function checkMove(figure, x1, y1, x2, y2) {
         }
 
         // Rochade
-/*         console.log(document.querySelector(`.F${x1}${y1}`).classList)
-        if(document.querySelector(`.F${x1}${y1}`).classList)
- */
+        if(document.querySelector(`.F${x1}${y1}`).dataset.move){ // King not moved
+            // Small Rochade
+            if (x2 == 6 && x1 == 6) {
+                if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) {
+                    if (document.querySelector(`.F7${y1}`).dataset.move) { // Rook not moved
+                        if (gameMatrix[y1][x1] == 0 && gameMatrix[y1][x1] == 0) { // Field between free
+                            rochType = true;
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+            // Big Rochade
+            if(x2 == 2){
+                
+            }
+        }
+        
+
         return false
     } else if (tfigure == "rook") {
         if(x2-x1 == 0 || y2-y1 == 0){
@@ -244,8 +263,18 @@ function checkMove(figure, x1, y1, x2, y2) {
  * @returns true if move is possible - false if move isn't possible
  */
 function checkMoveCheck(figure, pos, prePos){
+    let tempMatrix = new Array(8);
+    for (let y = 0; y < 8; y++) {
+        tempMatrix[y] = new Array(8);
+        
+        for (let x = 0; x < 8; x++) {
+            tempMatrix[y][x] = gameMatrix[y][x]
+        }
+    }
+
     gameMatrix[pos[1]][pos[0]] = figure;
     gameMatrix[prePos[1]][prePos[0]] = 0;
+
     retur = true;
 
     // If check color is the figure color return false
@@ -253,8 +282,29 @@ function checkMoveCheck(figure, pos, prePos){
         retur = false;
     }
 
-    gameMatrix[pos[1]][pos[0]] = 0;
-    gameMatrix[prePos[1]][prePos[0]] = figure;
+    for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+            gameMatrix[y][x] = tempMatrix[y][x]
+        }
+    }
 
     return retur;
+}
+
+function rochade(xK, yK, xR, yR){
+
+}
+
+function convertPawn(figure, x, y, y2){
+    if(y2 == 7 || y2 == 0) {
+        let side = figure.substr(figure.length-1, 1);
+        let newFigure;
+
+        console.log("Einzug")
+
+        newFigure = "queen"+side
+        return newFigure;
+    }
+
+    return figure;
 }
