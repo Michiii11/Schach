@@ -27,7 +27,7 @@ function moveFigure(position, figure) {
  * @returns true or false, if the move is valid
  */
 function checkMove(figure, x1, y1, x2, y2) {
-     // Checks if the Endposition isn't a own figure
+    // Checks if the Endposition isn't a own figure
     if(gameMatrix[y2][x2] != 0){
         if(gameMatrix[y2][x2].substr(gameMatrix[y2][x2].length-1, 1) == figure.substr(figure.length-1, 1)){
             return false
@@ -38,7 +38,7 @@ function checkMove(figure, x1, y1, x2, y2) {
         // Check if Farmer didn't move before
         if (x1 == x2) { // Move is in one Line
             if (y1 == 1) { // Checks if it's the first move
-                if (y2 == y1 + 2 || y2 == y1 + 1 && gameMatrix[y2][x2] == 0) {
+                if (y2 == y1 + 2 && gameMatrix[y2][x2] == 0 || y2 == y1 + 1 && gameMatrix[y2][x2] == 0) {
                     if(y2 == y1 + 2 && gameMatrix[y1+1][x1] != 0){
                         return false;
                     }
@@ -64,7 +64,7 @@ function checkMove(figure, x1, y1, x2, y2) {
         // Check if Farmer didn't move before
         if (x1 == x2) { // Move is in one Line
             if (y1 == 6) { // Checks if it's the first move
-                if (y2 == y1 - 2 || y2 == y1 - 1 && gameMatrix[y2][x2] == 0) {
+                if (y2 == y1 - 2 && gameMatrix[y2][x2] == 0 || y2 == y1 - 1 && gameMatrix[y2][x2] == 0) {
                     if(y2 == y1 - 2 && gameMatrix[y1-1][x1] != 0){
                         return false;
                     }
@@ -243,35 +243,18 @@ function checkMove(figure, x1, y1, x2, y2) {
  * @param {*} pos 
  * @returns true if move is possible - false if move isn't possible
  */
-function checkMoveCheck(figure, pos){
-    let retur = true;
-
-    let tempMatrix = new Array(8);
-    for (let i = 0; i < 8; i++) {
-        tempMatrix[i] = new Array(8)
-    }
-
-    // Copy Game Matrix
-    for (let y = 0; y < gameMatrix.length; y++) {
-        for(let x = 0; x < gameMatrix[0].length; x++) {
-            tempMatrix[y][x] = gameMatrix[y][x]
-        }
-    }
-
+function checkMoveCheck(figure, pos, prePos){
     gameMatrix[pos[1]][pos[0]] = figure;
-    gameMatrix[y1][x1] = 0;
+    gameMatrix[prePos[1]][prePos[0]] = 0;
+    retur = true;
 
     // If check color is the figure color return false
     if(checkCheck() == figure.substr(figure.length-1, 1)){
         retur = false;
     }
 
-    // Reset Game Matrix
-    for (let y = 0; y < gameMatrix.length; y++) {
-        for(let x = 0; x < gameMatrix[0].length; x++) {
-            gameMatrix[y][x] = tempMatrix[y][x]
-        }
-    }
+    gameMatrix[pos[1]][pos[0]] = 0;
+    gameMatrix[prePos[1]][prePos[0]] = figure;
 
     return retur;
 }

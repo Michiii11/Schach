@@ -135,7 +135,7 @@ function pickFigure(position) {
                 let check = checkMove(gameMatrix[y1][x1], x1, y1, parseInt(x), parseInt(y))
 
                 if (check) { // Is move possible
-                    check = checkMoveCheck(gameMatrix[y1][x1], [x, y])
+                    check = checkMoveCheck(gameMatrix[y1][x1], [x, y], prevPos)
 
                     if (check) { // Is the move no valid
                         document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).classList.remove("notUsed")
@@ -146,12 +146,16 @@ function pickFigure(position) {
                         check = checkCheck();
                         let checkmate;
                         if(check == "W"){
-                            checkmate = checkCheckmate("W");
-                            console.log(checkCheckmate("W"))
+                            if(checkCheckmate("W")){
+                                endMatch();
+                            }
+
                             document.querySelector('#check').innerHTML = "Weiß steht im Schach."
                         } else if(check == "B"){
-                            checkmate = checkCheckmate("B");
-                            console.log(checkCheckmate("B"))
+                            if(checkCheckmate("B")){
+                                endMatch();
+                            }
+
                             document.querySelector('#check').innerHTML = "Schwarz steht im Schach."
                         } else{
                             document.querySelector('#check').innerHTML = "Keiner steht im Schach."
@@ -215,8 +219,7 @@ function checkCheckmate(check) {
 
                 let posibilities = getPosibilities(figure, x, y);
                 for (let i = 0; i < posibilities.length; i++) {
-                    if(checkMoveCheck(figure, posibilities[i])){
-                        console.log(figure, posibilities[i])
+                    if(checkMoveCheck(figure, posibilities[i], [x,y])){
                         return false; 
                     }
                 }
@@ -319,7 +322,9 @@ function preMove(x, y) {
     for (let x0 = 0; x0 < 8; x0++) {
         for (let y0 = 0; y0 < 8; y0++) {
             if (checkMove(figure, x, y, x0, y0)) {
-                document.querySelector(`.F${x0}${y0}`).innerHTML = "<img src='./Pictures/preMove.png'>"
+                if(checkMoveCheck(figure, [x0, y0], [x, y])){
+                    document.querySelector(`.F${x0}${y0}`).innerHTML = "<img src='./Pictures/preMove.png'>"
+                }
             }
         }
     }
