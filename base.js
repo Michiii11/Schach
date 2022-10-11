@@ -142,8 +142,14 @@ function pickFigure(position) {
                             gameMatrix[y1][x1] = convertPawn(gameMatrix[y1][x1], x1, y1, parseInt(y));
                         }
 
-                        if(gameMatrix[y1][x1].substr(gameMatrix[y1][x1].length-1, 1) == "king"){
-                            rochade(x1, y1, type)
+                        if(gameMatrix[y1][x1].substr(0, gameMatrix[y1][x1].length-1) == "king"){
+                            if (document.querySelector(`.F${x1}${y1}`).dataset.move) { // Rook not moved
+                                if(rochType && parseInt(x) == 6){
+                                    rochade(y1)
+                                } else if(!rochType && parseInt(x) == 2){
+                                    rochade(y1)
+                                }
+                            }
                         }
 
                         document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).classList.remove("notUsed")
