@@ -162,7 +162,7 @@ function pickFigure(position) {
                             if(checkCheckmate("W")){
                                 endMatch();
                             }
-
+                            
                             document.querySelector('#check').innerHTML = "Weiß steht im Schach."
                         } else if(check == "B"){
                             if(checkCheckmate("B")){
