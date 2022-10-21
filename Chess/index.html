@@ -10,7 +10,7 @@
     <script src="movement.js" defer></script>
     <script src="features.js" defer></script>
     <script src="https://kit.fontawesome.com/557f0c19d3.js" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" type="image/x-icon" href="./Download.png">
+    <link rel="shortcut icon" type="image/x-icon" href="./Images/Download.png">
 </head>
 <body>
     <div id="game">
@@ -18,6 +18,16 @@
         <a id="check">Keiner steht im Schach</a>
         <div id="chessboard"></div>
         <i class="fa-solid fa-rotate" onclick="buildChessboard()"></i>
+    </div>
+
+    <div id="pawnField">
+        <h1>Choose your Figure</h1>
+        <div id="figures">
+            <img id="0" src="./Images/Figures/queenW.png" onclick="setPawn(this)">
+            <img id="1" src="./Images/Figures/rookW.png" onclick="setPawn(this)">
+            <img id="2" src="./Images/Figures/bishopW.png" onclick="setPawn(this)">
+            <img id="3" src="./Images/Figures/knightW.png" onclick="setPawn(this)">
+        </div>
     </div>
 </body>
 </html>

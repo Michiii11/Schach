@@ -58,3 +58,26 @@ h3{
 .active{
     border: orange 1px solid;
 }
+
+
+/*---------- Pawn Field ----------*/
+#pawnField{
+    position: absolute;
+    left: 30.4vw;
+    top: 45vh;
+    background: red;
+    width: 40vw;
+    height: 15vh;
+    display: none;
+}
+#figures{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+#figures img{
+    width: 10%;
+}
+#figures img:hover{
+    cursor: pointer;
+}

@@ -1,5 +1,4 @@
 //----------- Movement -----------//
-let position1; // Start Position
 let picked = false; // Status if figure is picked
 let white = true; // Current Player
 let rochType = true; // true small | false big
@@ -200,30 +199,26 @@ function checkMove(figure, x1, y1, x2, y2) {
         }
 
         // Rochade
-        if(y1 == 7 && x1 == 4 || y1 == 0 && x1 == 4){
-            if (document.querySelector(`.F${x1}${y1}`).dataset.move == false) { // King not moved
+        if(y1 == 7 && x1 == 4 || y1 == 0 && x1 == 4){ // Check if King is on the right place
+            if(document.querySelector(`.F${x1}${y1}`).dataset.move){ // Check if King not moved
                 // Small Rochade
-                if (x2 == 6) { // Check if x-Achis is right
-                    if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
-                        if (document.querySelector(`.F7${y1}`).dataset.move == false) { // Rook not moved
-                            if (gameMatrix[y1][5] == 0 && gameMatrix[y1][6] == 0) { // Field between free
-                                if (checkMoveCheck(figure, [y1, 4], [y1, 5])) {
-                                    rochType = true;
-                                    return true;
-                                }
-                            }
+                if(y2 == y1 && x2 == 6){ // Check if move place is correct
+                    if(document.querySelector(`.F7${y2}`).dataset.move){ // Check if Rook not moved
+                        if (gameMatrix[y1][5] == 0 && gameMatrix[y1][6] == 0) { // Field between free
+                                rochType = true;
+                                return true;
+                            
                         }
                     }
                 }
 
                 // Big Rochade
-                if (x2 == 2) { // Check if x-Achis is right
-                    if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
-                        if (document.querySelector(`.F7${y1}`).dataset.move == false) { // Rook not moved
-                            if (gameMatrix[y1][3] == 0 && gameMatrix[y1][2] == 0 && gameMatrix[y1][1] == 0) { // Field between free
+                if(y2 == y1 && x2 == 2){ // Check if move place is correct
+                    if(document.querySelector(`.F7${y2}`).dataset.move){ // Check if Rook not moved
+                        if (gameMatrix[y1][2] == 0 && gameMatrix[y1][3] == 0) { // Field between free
                                 rochType = false;
                                 return true;
-                            }
+                            
                         }
                     }
                 }
@@ -300,6 +295,10 @@ function checkMoveCheck(figure, pos, prePos){
     return retur;
 }
 
+/**
+ * Makes a rochade, sets the rooks to there new position
+ * @param {*} y Coordinate to get the side
+ */
 function rochade(y){
     let side;
     if(y == 0){
@@ -317,16 +316,50 @@ function rochade(y){
     }
 }
 
-function convertPawn(figure, x, y, y2){
-    if(y2 == 7 || y2 == 0) {
-        let side = figure.substr(figure.length-1, 1);
-        let newFigure;
-
-        console.log("Einzug")
-
-        newFigure = "queen"+side
-        return newFigure;
+/**
+ * Sets the figures in HTML
+ * @param {*} figure 
+ * @param {*} x 
+ * @param {*} y 
+ */
+function convertPawn(figure, x, y){
+    let side = "B"
+    if(figure.substr(figure.length-1, 1) == "W"){
+        side = "W"
     }
 
-    return figure;
+    for (let i = 0; i < 4; i++) {
+        document.getElementById(`${i}`).removeAttribute('class');
+        document.getElementById(`${i}`).classList.add(`${x}`)
+        document.getElementById(`${i}`).classList.add(`${y}`)
+    }
+
+    document.getElementById('0').src = `./Images/Figures/queen${side}.png`;
+    document.getElementById(`0`).classList.add(`queen${side}`)
+
+    document.getElementById('1').src = `./Images/Figures/rook${side}.png`;
+    document.getElementById(`1`).classList.add(`rook${side}`)
+
+    document.getElementById('2').src = `./Images/Figures/bishop${side}.png`;
+    document.getElementById(`2`).classList.add(`bishop${side}`)
+
+    document.getElementById('3').src = `./Images/Figures/knight${side}.png`;
+    document.getElementById(`3`).classList.add(`knight${side}`)
+
+    document.querySelector('#pawnField').style.display = "block";
+}
+
+/**
+ * Attribute of the figure
+ * @param {*} temp 
+ */
+function setPawn(temp){
+    let x = temp.classList[0]
+    let y = temp.classList[1]
+    let figure = temp.classList[2]
+
+    gameMatrix[y][x] = figure
+    setFigures();
+    checkCheck();
+    document.querySelector('#pawnField').style.display = "none";
 }

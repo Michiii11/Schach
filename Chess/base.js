@@ -10,26 +10,23 @@ let gameMatrix = [
     ["rookB", "knightB", "bishopB", "queenB", "kingB", "bishopB", "knightB", "rookB"],
 ]
 
-
-//----------- Build -----------//
-let side = false;
+//----------- Building Chessboard -----------//
+let posMark; // Marked Position
+let side = false; // true == white , false == black
 buildChessboard();
+
 /**
  * Builds the Chessboard in HTML
  * You can swap the sides
  */
-function buildChessboard() { // true == white , false == black
+function buildChessboard() {
     let content = ""
 
     if (!side) { // Schwarz unten   
         for (let x = 0; x < 8; x++) {
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
-                if (x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0) {
-                    content += `<div class="box F${x}${y}" data-move="false" onclick="pickFigure('${x}${y}')"></div>`;
-                } else {
-                    content += `<div class="box F${x}${y}" data-move="true" onclick="pickFigure('${x}${y}')"></div>`;
-                }
+                content += `<div class="box F${x}${y}" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -37,11 +34,7 @@ function buildChessboard() { // true == white , false == black
         for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
-                if (x == 4 && y == 0 || x == 4 && y == 7 || x == 7 && y == 7 || x == 0 && y == 7 || x == 0 && y == 0 || x == 7 && y == 0) {
-                    content += `<div class="box F${x}${y}" data-move="false" onclick="pickFigure('${x}${y}')"></div>`;
-                } else {
-                    content += `<div class="box F${x}${y}" data-move="true" onclick="pickFigure('${x}${y}')"></div>`;
-                }
+                content += `<div class="box F${x}${y}" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -55,6 +48,10 @@ function buildChessboard() { // true == white , false == black
     document.getElementById("chessboard").innerHTML = content;
     setPattern();
     setFigures();
+    if(posMark){
+        addMark(posMark)
+        preMove(posMark[0], posMark[1])
+    }
 }
 
 /**
@@ -65,7 +62,7 @@ function setFigures() {
         for (let y = 7; y >= 0; y--) {
             document.querySelector(`.F${x}${y}`).style.backgroundImage = "none";
             if (gameMatrix[y][x]) {
-                document.querySelector(`.F${x}${y}`).style.backgroundImage = `url(./Figures/${gameMatrix[y][x]}.png)`;
+                document.querySelector(`.F${x}${y}`).style.backgroundImage = `url(./Images/Figures/${gameMatrix[y][x]}.png)`;
             }
         }
     }
@@ -112,7 +109,7 @@ function pickFigure(position) {
             if (white == true && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "W" || white == false && gameMatrix[y][x].substr(gameMatrix[y][x].length - 1, 1) == "B") {
                 picked = false;
                 prevPos = null;
-                removeMark(position)
+                removeMark()
             }
         }
     }
@@ -124,7 +121,8 @@ function pickFigure(position) {
                     removeMark();
                 }
                 preMove(x, y)
-                addMark(position)
+                posMark = position;
+                addMark(posMark)
                 picked = true;
                 prevPos = position
             }
@@ -136,14 +134,25 @@ function pickFigure(position) {
 
                 if (check) { // Is move possible
                     check = checkMoveCheck(gameMatrix[y1][x1], [x, y], prevPos)
+                    if (check) { // Is the move not valid
 
-                    if (check) { // Is the move no valid
-                        if(gameMatrix[y1][x1].substr(gameMatrix[y1][x1].length-1, 1) == "pawn") {
-                            gameMatrix[y1][x1] = convertPawn(gameMatrix[y1][x1], x1, y1, parseInt(y));
+                        // Pawn Einziehen
+                        if(gameMatrix[y1][x1].substr(0, gameMatrix[y1][x1].length-1) == "pawn") {
+                            if(parseInt(y) == 7 || parseInt(y) == 0){
+                                convertPawn(gameMatrix[y1][x1], x, y);
+                            }
                         }
 
+                        // King Rochade
                         if(gameMatrix[y1][x1].substr(0, gameMatrix[y1][x1].length-1) == "king"){
-                            if (document.querySelector(`.F${x1}${y1}`).dataset.move) { // Rook not moved
+                            let position;
+                            if(gameMatrix[y1][x1].substr(gameMatrix[y1][x1].length-1, 1) == "W"){
+                                position = 40;
+                            } else{
+                                position = 47;
+                            }
+
+                            if (document.querySelector(`.F${position}`).dataset.move) { // Rook not moved
                                 if(rochType && parseInt(x) == 6){
                                     rochade(y1)
                                 } else if(!rochType && parseInt(x) == 2){
@@ -152,7 +161,7 @@ function pickFigure(position) {
                             }
                         }
 
-                        document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).dataset.move = "true";
+                        document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).removeAttribute('data-move');
 
                         let pos = [x, y]
                         moveFigure(pos, gameMatrix[y1][x1])
@@ -183,7 +192,7 @@ function pickFigure(position) {
     } else { // Remove marker
         picked = false;
         prevPos = null;
-        removeMark(position)
+        removeMark()
     }
 }
 
@@ -336,7 +345,7 @@ function preMove(x, y) {
         for (let y0 = 0; y0 < 8; y0++) {
             if (checkMove(figure, x, y, x0, y0)) {
                 if(checkMoveCheck(figure, [x0, y0], [x, y])){
-                    document.querySelector(`.F${x0}${y0}`).innerHTML = "<img src='./Pictures/preMove.png'>"
+                    document.querySelector(`.F${x0}${y0}`).innerHTML = "<img src='./Images/preMove.png'>"
                 }
             }
         }
