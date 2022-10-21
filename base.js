@@ -77,7 +77,7 @@ function setFigures() {
 function setPattern() {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            if ((i + j) % 2 == 0) {
+            if ((i + j) % 2 == 1) {
                 getPos(i, j).style.backgroundColor = "grey";
             }
         }
@@ -152,7 +152,7 @@ function pickFigure(position) {
                             }
                         }
 
-                        document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).classList.remove("notUsed")
+                        document.querySelector(`.F${prevPos[0]}${prevPos[1]}`).dataset.move = "true";
 
                         let pos = [x, y]
                         moveFigure(pos, gameMatrix[y1][x1])

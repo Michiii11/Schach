@@ -200,36 +200,37 @@ function checkMove(figure, x1, y1, x2, y2) {
         }
 
         // Rochade
-        if(document.querySelector(`.F${x1}${y1}`).dataset.move){ // King not moved
-            // Small Rochade
-            if (x2 == 6 && x1 == 4) { // Check if x-Achis is right
-                if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
-                    if (document.querySelector(`.F7${y1}`).dataset.move) { // Rook not moved
-                        if (gameMatrix[y1][5] == 0 && gameMatrix[y1][6] == 0) { // Field between free
-                            if(checkMoveCheck(figure, [y1, 4], [y1, 5])){
-                                rochType = true;
+        if(y1 == 7 && x1 == 4 || y1 == 0 && x1 == 4){
+            if (document.querySelector(`.F${x1}${y1}`).dataset.move == false) { // King not moved
+                // Small Rochade
+                if (x2 == 6) { // Check if x-Achis is right
+                    if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
+                        if (document.querySelector(`.F7${y1}`).dataset.move == false) { // Rook not moved
+                            if (gameMatrix[y1][5] == 0 && gameMatrix[y1][6] == 0) { // Field between free
+                                if (checkMoveCheck(figure, [y1, 4], [y1, 5])) {
+                                    rochType = true;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Big Rochade
+                if (x2 == 2) { // Check if x-Achis is right
+                    if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
+                        if (document.querySelector(`.F7${y1}`).dataset.move == false) { // Rook not moved
+                            if (gameMatrix[y1][3] == 0 && gameMatrix[y1][2] == 0 && gameMatrix[y1][1] == 0) { // Field between free
+                                rochType = false;
                                 return true;
                             }
                         }
                     }
                 }
             }
-
-            // Big Rochade
-            if(x2 == 2 && x1 == 4){ // Check if x-Achis is right
-                if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
-                    if (document.querySelector(`.F7${y1}`).dataset.move) { // Rook not moved
-                        if (gameMatrix[y1][3] == 0 && gameMatrix[y1][2] == 0 && gameMatrix[y1][1] == 0 ) { // Field between free
-                            rochType = false;
-                            return true;
-                        }
-                    }
-                }
-            }
         }
-        
-
-        return false
+    
+        return false;
     } else if (tfigure == "rook") {
         if(x2-x1 == 0 || y2-y1 == 0){
             let diff;
