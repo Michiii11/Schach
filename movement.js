@@ -206,8 +206,10 @@ function checkMove(figure, x1, y1, x2, y2) {
                 if (y1 == 0 && y2 == 0 || y1 == 7 && y2 == 7) { // Check if y-Achis is right
                     if (document.querySelector(`.F7${y1}`).dataset.move) { // Rook not moved
                         if (gameMatrix[y1][5] == 0 && gameMatrix[y1][6] == 0) { // Field between free
-                            rochType = true;
-                            return true;
+                            if(checkMoveCheck(figure, [y1, 4], [y1, 5])){
+                                rochType = true;
+                                return true;
+                            }
                         }
                     }
                 }

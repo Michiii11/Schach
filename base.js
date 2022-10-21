@@ -173,7 +173,7 @@ function pickFigure(position) {
                         } else{
                             document.querySelector('#check').innerHTML = "Keiner steht im Schach."
                         }
-    
+
                         picked = false;
                         prevPos = null;
                     }
