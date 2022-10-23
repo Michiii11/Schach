@@ -26,7 +26,7 @@ function buildChessboard() {
         for (let x = 0; x < 8; x++) {
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
-                content += `<div class="box F${x}${y}" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
+                content += `<div class="box F${x}${y}" data-move="0" draggable="true" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -34,7 +34,7 @@ function buildChessboard() {
         for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
-                content += `<div class="box F${x}${y}" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
+                content += `<div class="box F${x}${y}" data-move="0" draggable="true" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -60,10 +60,11 @@ function buildChessboard() {
 function setFigures() {
     for (let x = 0; x < 8; x++) {
         for (let y = 7; y >= 0; y--) {
-            document.querySelector(`.F${x}${y}`).style.backgroundImage = "none";
+            document.querySelector(`.F${x}${y}`).innerHTML = "";
             if (gameMatrix[y][x]) {
-                document.querySelector(`.F${x}${y}`).style.backgroundImage = `url(./Images/Figures/${gameMatrix[y][x]}.png)`;
+                document.querySelector(`.F${x}${y}`).innerHTML = `<img src="./Images/Figures/${gameMatrix[y][x]}.png">`;
             }
+            document.querySelector(`.F${x}${y}`).innerHTML += `<a>${x}${y}</a>`;
         }
     }
 }
@@ -103,6 +104,7 @@ let prevPos = null;
 function pickFigure(position) {
     let x = position[0]
     let y = position[1]
+    console.log(x, y)
 
     if (prevPos && gameMatrix[y][x] != 0) { // If a other figure get picked it get marked
         if (prevPos != position) {
@@ -269,7 +271,8 @@ function swapMove() {
  * @param {*} position which should be marked
  */
 function addMark(position) {
-    let elem = document.querySelector(`.F${position}`)
+    console.log(position)
+    let elem = document.querySelector(`.F${position[0]}${position[1]}`)
     elem.classList.add("active")
 }
 
@@ -361,6 +364,7 @@ function removePreMove() {
             document.querySelector(`.F${x}${y}`).innerHTML = ""
         }
     }
+    setFigures();
 }
 
 function endMatch() {
