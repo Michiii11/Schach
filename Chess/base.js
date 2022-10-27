@@ -63,8 +63,8 @@ function setFigures() {
             document.querySelector(`.F${x}${y}`).innerHTML = "";
             if (gameMatrix[y][x]) {
                 document.querySelector(`.F${x}${y}`).innerHTML = `<img src="./Images/Figures/${gameMatrix[y][x]}.png">`;
+                document.querySelector(`.F${x}${y}`).classList.add('figure')
             }
-            document.querySelector(`.F${x}${y}`).innerHTML += `<a>${x}${y}</a>`;
         }
     }
 }
@@ -104,7 +104,6 @@ let prevPos = null;
 function pickFigure(position) {
     let x = position[0]
     let y = position[1]
-    console.log(x, y)
 
     if (prevPos && gameMatrix[y][x] != 0) { // If a other figure get picked it get marked
         if (prevPos != position) {
@@ -271,7 +270,6 @@ function swapMove() {
  * @param {*} position which should be marked
  */
 function addMark(position) {
-    console.log(position)
     let elem = document.querySelector(`.F${position[0]}${position[1]}`)
     elem.classList.add("active")
 }
@@ -280,8 +278,11 @@ function addMark(position) {
  * Removes all marker
  */
 function removeMark() {
-    document.querySelector('.active').classList.remove("active");
-    removePreMove();
+    if(document.querySelector('.active')){
+        document.querySelector('.active').classList.remove("active");
+        removePreMove();
+        posMark = null;
+    }
 }
 
 /**

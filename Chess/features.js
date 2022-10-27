@@ -1,41 +1,48 @@
 // select the item element
-const item = document.querySelector('.box');
-
 let posStart;
 let posEnd;
 let figure;
-
-// attach the dragstart event handler
-item.addEventListener('dragstart', dragStart);
-
-// handle the dragstart
-
-function dragStart(e) {
-    e.dataTransfer.setData('text/plain', e.target.id);
-    setTimeout(() => {
-        e.target.classList.add('hide');
-    }, 0);
-}
-
+let temp = 1;
 
 const boxes = document.querySelectorAll('div');
 
 boxes.forEach(box => {
+    box.addEventListener('dragstart', dragStart)
     box.addEventListener('dragenter', dragEnter)
     box.addEventListener('dragover', dragOver);
     box.addEventListener('dragleave', dragLeave);
     box.addEventListener('drop', drop);
 });
 
-function dragEnter(e) {
-    if(!posStart){
-        posStart = e.target.classList[1];
-        if(posStart){
-            pickFigure(posStart.charAt(1) + posStart.charAt(2))
-        }
+function dragStart(e){
+    posStart = null;
+    posEnd = null;
+    figure = null;
+    temp = 1;
+
+    let pos = e.path[1].classList[1];
+
+    if(pos){
+        posStart = pos.charAt(1) + pos.charAt(2)
+    
+        figure = gameMatrix[pos.charAt(2)][pos.charAt(1)]
     }
+    
+    e.dataTransfer.setData('text/plain', e.target.id);
+    setTimeout(() => {
+        e.target.classList.add('hide');
+    }, 0);
+}
+
+function dragEnter(e) {
     e.preventDefault();
     e.target.classList.add('drag-over');
+
+    let pos = e.target.classList[1]
+
+    if(pos){
+        posEnd = pos.charAt(1) + pos.charAt(2)
+    }
 }
 
 function dragOver(e) {
@@ -48,16 +55,15 @@ function dragLeave(e) {
 }
 
 function drop(e) {
-    e.target.classList.remove('drag-over');
+    pickFigure(posStart)
 
-    posEnd = e.target.classList[1];
-    document.querySelector('#devField').innerHTML += `<p>PosEnd: ${posEnd}</p>`
+    if(temp == 1){
+        e.target.classList.remove('drag-over');
+        document.querySelector('.hide').classList.remove('hide');
 
-    if(posEnd){
-        pickFigure(posEnd.charAt(1) + posEnd.charAt(2))
+        pickFigure(posEnd)
+    } else if(temp == 4){
+        temp = 1;
     }
-    document.querySelector('#devField').innerHTML += `<p>${posStart}, ${posEnd}</p>`
-
-    let posS = [posStart.charAt(1), posStart.charAt(2)] // x - y
-    let posE = [posEnd.charAt(1), posEnd.charAt(2)] // x - y
+    temp++
 }

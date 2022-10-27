@@ -88,15 +88,10 @@ h3{
     cursor: pointer;
 }
 
+.hide {
+    display: none;
+}
 
-
-#devField{
-    border: 1px solid white;
-    border-radius: 1rem;
-    position: absolute;
-    top: 12%;
-    left: 5%;
-    width: 20vw;
-    height: 82vh;
-    overflow: auto;
+.drag-over{
+    border: dashed 1px red;
 }
