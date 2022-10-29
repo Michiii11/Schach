@@ -1,7 +1,6 @@
 // select the item element
 let posStart;
 let posEnd;
-let figure;
 let temp = 1;
 
 const boxes = document.querySelectorAll('div');
@@ -25,7 +24,6 @@ function dragStart(e){
     if(pos){
         posStart = pos.charAt(1) + pos.charAt(2)
     
-        figure = gameMatrix[pos.charAt(2)][pos.charAt(1)]
     }
     
     e.dataTransfer.setData('text/plain', e.target.id);
@@ -56,7 +54,6 @@ function dragLeave(e) {
 
 function drop(e) {
     pickFigure(posStart)
-
     if(temp == 1){
         e.target.classList.remove('drag-over');
         document.querySelector('.hide').classList.remove('hide');

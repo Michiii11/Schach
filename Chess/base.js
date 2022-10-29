@@ -26,7 +26,7 @@ function buildChessboard() {
         for (let x = 0; x < 8; x++) {
             content += `<div class="rows">`
             for (let y = 7; y >= 0; y--) {
-                content += `<div class="box F${x}${y}" data-move="0" draggable="true" onclick="pickFigure('${x}${y}')"></div>`;
+                content += `<div class="box F${x}${y}" draggable="true" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -34,7 +34,7 @@ function buildChessboard() {
         for (let x = 7; x >= 0; x--) {
             content += `<div class="rows">`
             for (let y = 0; y < 8; y++) {
-                content += `<div class="box F${x}${y}" data-move="0" draggable="true" onclick="pickFigure('${x}${y}')"></div>`;
+                content += `<div class="box F${x}${y}" draggable="true" data-move="0" onclick="pickFigure('${x}${y}')"></div>`;
             }
             content += `</div>`
         }
@@ -62,8 +62,11 @@ function setFigures() {
         for (let y = 7; y >= 0; y--) {
             document.querySelector(`.F${x}${y}`).innerHTML = "";
             if (gameMatrix[y][x]) {
+                document.querySelector(`.F${x}${y}`).setAttribute('draggable', true);
                 document.querySelector(`.F${x}${y}`).innerHTML = `<img src="./Images/Figures/${gameMatrix[y][x]}.png">`;
                 document.querySelector(`.F${x}${y}`).classList.add('figure')
+            } else{
+                document.querySelector(`.F${x}${y}`).setAttribute('draggable', false);
             }
         }
     }
