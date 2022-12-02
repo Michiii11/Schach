@@ -23,7 +23,6 @@ function dragStart(e){
 
     if(pos){
         posStart = pos.charAt(1) + pos.charAt(2)
-    
     }
     
     e.dataTransfer.setData('text/plain', e.target.id);
