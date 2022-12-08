@@ -3,7 +3,7 @@ let posStart;
 let posEnd;
 let temp = 1;
 
-const boxes = document.querySelectorAll('div');
+const boxes = document.querySelectorAll('.box');
 
 boxes.forEach(box => {
     box.addEventListener('dragstart', dragStart)
